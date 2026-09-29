@@ -1,0 +1,18 @@
+services:
+    mariadb:
+        image: mariadb:11.4
+        container_name: mariadb
+    
+        environment:
+            MARIADB_ROOT_PASSWORD: root
+    
+        ports:
+            - "3306:3306"
+    
+        volumes:
+            - inspection_mariadb_data:/var/lib/mysql
+
+volumes:
+    inspection_mariadb_data:
+        external: true
+
