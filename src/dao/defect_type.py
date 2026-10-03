@@ -1,3 +1,8 @@
+"""欠陥種別マスタ (defect_type_tb) データアクセスモジュール。
+
+欠陥種別の登録、取得、更新、削除を行うDAOクラスを提供します。
+"""
+
 from logging import Logger
 
 import mariadb
@@ -7,7 +12,19 @@ from model import DefectType
 
 
 class DefectTypeDAO:
+    """欠陥種別テーブル (defect_type_tb) に対するCRUD操作を提供するDAOクラス。
+
+    Attributes:
+        _logger (Logger): ロガーインスタンス。
+        _table_name (str): テーブル名 (defect_type_tb)。
+    """
+
     def __init__(self, logger: Logger):
+        """DefectTypeDAOのインスタンスを初期化する。
+
+        Args:
+            logger (Logger): ロギングに使用するロガー。
+        """
         self._logger = logger
 
         self._table_name = "defect_type_tb"
@@ -36,6 +53,19 @@ class DefectTypeDAO:
         ]
 
     def create(self, conn: Connection, defect_type_data: DefectType) -> bool:
+        """新しい欠陥種別レコードをデータベースに作成する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            defect_type_data (DefectType): 登録する欠陥種別データ。
+
+        Returns:
+            bool: 登録が成功した場合はTrue。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または必須フィールドが不足している場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if defect_type_data is None:
@@ -87,6 +117,19 @@ class DefectTypeDAO:
     def read(
         self, conn: Connection, defect_type_data: DefectType
     ) -> list[DefectType]:
+        """検索条件に一致する欠陥種別レコードを取得する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            defect_type_data (DefectType): 検索条件を含む欠陥種別データ。
+
+        Returns:
+            list[DefectType]: 取得された欠陥種別オブジェクトのリスト。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if defect_type_data is None:
@@ -151,6 +194,19 @@ class DefectTypeDAO:
     def update(
         self, conn: Connection, defect_type_data: DefectType
     ) -> bool:
+        """指定された検索条件に一致する欠陥種別レコードを更新する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            defect_type_data (DefectType): 検索条件および更新値を含む欠陥種別データ。
+
+        Returns:
+            bool: 1行以上更新された場合はTrue、それ以外はFalse。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件/更新条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if defect_type_data is None:
@@ -220,6 +276,19 @@ class DefectTypeDAO:
     def delete(
         self, conn: Connection, defect_type_data: DefectType
     ) -> bool:
+        """指定された検索条件に一致する欠陥種別レコードを削除する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            defect_type_data (DefectType): 検索条件を含む欠陥種別データ。
+
+        Returns:
+            bool: 1行以上削除された場合はTrue、それ以外はFalse。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if defect_type_data is None:

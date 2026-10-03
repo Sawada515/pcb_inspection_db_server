@@ -1,4 +1,9 @@
 
+"""保管庫情報 (store_tb) データアクセスモジュール。
+
+保管庫（スロット）の状態取得および状態更新を行うDAOクラスを提供します。
+"""
+
 from logging import Logger
 
 import mariadb
@@ -8,7 +13,19 @@ from model import Store, StoreStatus
 
 
 class StoreDAO:
+    """保管庫テーブル (store_tb) に対する操作を提供するDAOクラス。
+
+    Attributes:
+        _logger (Logger): ロガーインスタンス。
+        _table_name (str): テーブル名 (store_tb)。
+    """
+
     def __init__(self, logger: Logger):
+        """StoreDAOのインスタンスを初期化する。
+
+        Args:
+            logger (Logger): ロギングに使用するロガー。
+        """
         self._table_name = "store_tb"
         self._logger = logger
 
@@ -19,14 +36,34 @@ class StoreDAO:
         self._update_white_list = ["store_status", "user_id"]
 
     def create(self, conn: Connection, store_data: Store) -> None:
-        """
-        このメソッドは使わない
-        テーブル作成時にデータも保存済みなため
-        """
+        """新しい保管庫レコードを作成する（未実装）。
 
+        Note:
+            テーブル作成時に初期データが配置済みのため、本メソッドはサポートされません。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            store_data (Store): 保管庫データ。
+
+        Raises:
+            NotImplementedError: 本メソッドが呼び出された場合に常に発生します。
+        """
         raise NotImplementedError("This method is not implemented")
 
     def read(self, conn: Connection, store_data: Store) -> list[Store]:
+        """検索条件に一致する保管庫レコードを取得する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            store_data (Store): 検索条件を含む保管庫データ。
+
+        Returns:
+            list[Store]: 取得された保管庫オブジェクトのリスト。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if store_data is None:
@@ -102,6 +139,19 @@ class StoreDAO:
                 cursor.close()
 
     def update(self, conn: Connection, store_data: Store) -> bool:
+        """指定された検索条件に一致する保管庫レコードを更新する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            store_data (Store): 検索条件（store_id または col/row）および更新値（store_status, user_id）を含む保管庫データ。
+
+        Returns:
+            bool: 1行以上更新された場合はTrue、それ以外はFalse。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または必要な検索条件/更新条件が不足している場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if store_data is None:
@@ -187,9 +237,16 @@ class StoreDAO:
                 cursor.close()
 
     def delete(self, conn: Connection, store_data: Store) -> None:
-        """
-        このメソッドは使わない
-        データ削除は絶対に行わない
-        """
+        """保管庫レコードを削除する（未実装）。
 
+        Note:
+            保管庫データの削除は仕様上行われません。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            store_data (Store): 保管庫データ。
+
+        Raises:
+            NotImplementedError: 本メソッドが呼び出された場合に常に発生します。
+        """
         raise NotImplementedError("This method is not implemented")

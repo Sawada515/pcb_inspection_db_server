@@ -1,3 +1,9 @@
+"""リクエストルーティングモジュール。
+
+クライアントから受け取ったリクエスト（リソース種別、クエリ種別、生データ）を
+対応するデータモデルにマッピングし、適切なサービス層のメソッドへディスパッチします。
+"""
+
 from enum import Enum
 from logging import Logger
 from typing import Any
@@ -17,6 +23,15 @@ from service import (
 
 
 class QueryType(Enum):
+    """データベースに対するクエリ操作種別を表す列挙型。
+
+    Attributes:
+        CREATE: 作成 (INSERT)。
+        READ: 読み取り (SELECT)。
+        UPDATE: 更新 (UPDATE)。
+        DELETE: 削除 (DELETE)。
+    """
+
     CREATE = "create"
     READ = "read"
     UPDATE = "update"
@@ -24,6 +39,18 @@ class QueryType(Enum):
 
 
 class ResourceType(Enum):
+    """リクエスト対象のサービスリソース種別を表す列挙型。
+
+    Attributes:
+        USER: ユーザーサービス (user_service)。
+        INSPECTION: 検査サービス (inspection_service)。
+        REQUEST: 検査要求サービス (request_service)。
+        STORE: 保管庫サービス (store_service)。
+        DEFECT: 欠陥サービス (defect_service)。
+        DEFECTTYPE: 欠陥種別サービス (defect_type_service)。
+        IMAGE: 画像サービス (image_service)。
+    """
+
     USER = "user_service"
     INSPECTION = "inspection_service"
     REQUEST = "request_service"
@@ -52,7 +79,20 @@ RESOURCE_MODEL_MAP = {
 
 
 class RequestRouter:
+    """受信リクエストを適切なサービスにルーティング・実行するクラス。
+
+    Attributes:
+        _logger (Logger): ロガーインスタンス。
+        _services (dict[ResourceType, Any]): リソース種別とサービスクラスインスタンスのマッピング。
+        _allowed_query_types (dict[ResourceType, set[QueryType]]): リソースごとに許可されたクエリ種別セット。
+    """
+
     def __init__(self, logger: Logger) -> None:
+        """RequestRouterのインスタンスを初期化する。
+
+        Args:
+            logger (Logger): ロガーインスタンス。
+        """
         self._logger = logger
 
         # サービスインスタンス
@@ -84,6 +124,23 @@ class RequestRouter:
         request_data: Any,
         conn: Connection,
     ) -> Any:
+        """リクエストパラメータを検証・モデル化し、対応するサービスへディスパッチして結果を返す。
+
+        Args:
+            request_resource_str (str): リソース種別文字列 (例: "user_service")。
+            query_type_str (str): クエリ種別文字列 (例: "read", "create")。
+            request_data (Any): リクエストデータ辞書。
+            conn (Connection): データベース接続オブジェクト。
+
+        Returns:
+            Any: サービス実行結果（作成/更新/削除のbool値、または取得されたモデルオブジェクト/リスト）。
+
+        Raises:
+            KeyError: リソース種別またはクエリ種別が無効な文字列の場合。
+            ValueError: サービスが見つからない、クエリ種別がリソースに対して許可されていない、
+                またはモデルクラスのマッピングが存在しない場合。
+            RuntimeError: サービス層でデータベースエラー等が発生した場合。
+        """
         try:
             request_resource: ResourceType = ResourceType(request_resource_str)
         except KeyError:
@@ -139,6 +196,20 @@ class RequestRouter:
     def _dispatch_query_type(
         self, query_type: QueryType, request_data: Any, conn: Connection, dao_service: Any
     ) -> Any:
+        """クエリ種別に応じてサービスのCRUDメソッドを呼び出す。
+
+        Args:
+            query_type (QueryType): 実行するクエリ種別。
+            request_data (Any): モデルインスタンス化されたリクエストデータ。
+            conn (Connection): データベース接続オブジェクト。
+            dao_service (Any): 呼び出し対象のサービスインスタンス。
+
+        Returns:
+            Any: 各サービスメソッドの戻り値。
+
+        Raises:
+            ValueError: クエリ種別が未知の場合。
+        """
         if query_type == QueryType.CREATE:
             return dao_service.create(conn, request_data)
         elif query_type == QueryType.READ:

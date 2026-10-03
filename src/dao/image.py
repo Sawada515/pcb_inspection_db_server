@@ -1,3 +1,8 @@
+"""画像情報 (image_tb) データアクセスモジュール。
+
+欠陥画像のパス情報の登録、取得、更新、削除を行うDAOクラスを提供します。
+"""
+
 from logging import Logger
 
 import mariadb
@@ -7,7 +12,19 @@ from model import Image
 
 
 class ImageDAO:
+    """画像テーブル (image_tb) に対するCRUD操作を提供するDAOクラス。
+
+    Attributes:
+        _logger (Logger): ロガーインスタンス。
+        _table_name (str): テーブル名 (image_tb)。
+    """
+
     def __init__(self, logger: Logger):
+        """ImageDAOのインスタンスを初期化する。
+
+        Args:
+            logger (Logger): ロギングに使用するロガー。
+        """
         self._logger = logger
 
         self._table_name = "image_tb"
@@ -39,6 +56,19 @@ class ImageDAO:
         ]
 
     def create(self, conn: Connection, image_data: Image) -> bool:
+        """新しい画像レコードをデータベースに作成する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            image_data (Image): 登録する画像データ。
+
+        Returns:
+            bool: 登録が成功した場合はTrue。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または必須フィールドが不足している場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if image_data is None:
@@ -89,6 +119,19 @@ class ImageDAO:
                 cursor.close()
 
     def read(self, conn: Connection, image_data: Image) -> list[Image]:
+        """検索条件に一致する画像レコードを取得する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            image_data (Image): 検索条件を含む画像データ。
+
+        Returns:
+            list[Image]: 取得された画像オブジェクトのリスト。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if image_data is None:
@@ -153,6 +196,19 @@ class ImageDAO:
                 cursor.close()
 
     def update(self, conn: Connection, image_data: Image) -> bool:
+        """指定された検索条件に一致する画像レコードを更新する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            image_data (Image): 検索条件および更新値を含む画像データ。
+
+        Returns:
+            bool: 1行以上更新された場合はTrue、それ以外はFalse。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件/更新条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if image_data is None:
@@ -220,6 +276,19 @@ class ImageDAO:
                 cursor.close()
 
     def delete(self, conn: Connection, image_data: Image) -> bool:
+        """指定された検索条件に一致する画像レコードを削除する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            image_data (Image): 検索条件を含む画像データ。
+
+        Returns:
+            bool: 1行以上削除された場合はTrue、それ以外はFalse。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if image_data is None:

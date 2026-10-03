@@ -1,3 +1,9 @@
+"""PCB検査データベースサーバーパッケージ。
+
+本パッケージはPCB検査データベースサーバーの主要コンポーネント（設定読み込み、
+ロギング、DB接続、ソケット通信、ルーティングなど）を提供します。
+"""
+
 from src.config import Config, load_config
 from src.database_connector import DatabaseConnector
 from src.logger import Logger

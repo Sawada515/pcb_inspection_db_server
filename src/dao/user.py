@@ -1,3 +1,8 @@
+"""ユーザー情報 (user_tb) データアクセスモジュール。
+
+作業者・管理者等のユーザー情報の登録、取得、更新、削除を行うDAOクラスを提供します。
+"""
+
 from logging import Logger
 
 import mariadb
@@ -7,7 +12,19 @@ from model import User, UserRole, UserStatus
 
 
 class UserDAO:
+    """ユーザーテーブル (user_tb) に対するCRUD操作を提供するDAOクラス。
+
+    Attributes:
+        _logger (Logger): ロガーインスタンス。
+        _table_name (str): テーブル名 (user_tb)。
+    """
+
     def __init__(self, logger: Logger):
+        """UserDAOのインスタンスを初期化する。
+
+        Args:
+            logger (Logger): ロギングに使用するロガー。
+        """
         self._logger = logger
 
         self._table_name = "user_tb"
@@ -30,6 +47,19 @@ class UserDAO:
         ]
 
     def create(self, conn: Connection, user_data: User) -> bool:
+        """新しいユーザーレコードをデータベースに作成する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            user_data (User): 登録するユーザーデータ。
+
+        Returns:
+            bool: 登録が成功した場合はTrue。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または必須フィールドが不足している場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if user_data is None:
@@ -79,6 +109,19 @@ class UserDAO:
                 cursor.close()
 
     def read(self, conn: Connection, user_data: User) -> list[User]:
+        """検索条件に一致するユーザーレコードを取得する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            user_data (User): 検索条件を含むユーザーデータ。
+
+        Returns:
+            list[User]: 取得されたユーザーオブジェクトのリスト。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if user_data is None:
@@ -144,6 +187,19 @@ class UserDAO:
                 cursor.close()
 
     def update(self, conn: Connection, user_data: User) -> bool:
+        """指定された検索条件に一致するユーザーレコードを更新する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            user_data (User): 検索条件および更新値を含むユーザーデータ。
+
+        Returns:
+            bool: 1行以上更新された場合はTrue、それ以外はFalse。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件/更新条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if user_data is None:
@@ -205,6 +261,19 @@ class UserDAO:
                 cursor.close()
 
     def delete(self, conn: Connection, user_data: User) -> bool:
+        """指定された検索条件に一致するユーザーレコードを削除する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            user_data (User): 検索条件を含むユーザーデータ。
+
+        Returns:
+            bool: 1行以上削除された場合はTrue、それ以外はFalse。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if user_data is None:

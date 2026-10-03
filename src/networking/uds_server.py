@@ -1,3 +1,9 @@
+"""UNIXドメインソケットサーバーモジュール。
+
+クライアントからの接続を受け付け、マルチスレッドでリクエストを受信・ルーターへのディスパッチ・
+レスポンス返却を行うサーバー機能を提供します。
+"""
+
 import os
 import socket
 import struct
@@ -16,7 +22,28 @@ from request_router import RequestRouter
 
 
 class UnixSocketServer:
+    """UNIXドメインソケットを用いたマルチスレッドサーバークラス。
+
+    Attributes:
+        _logger: サーバーロガー。
+        _socket_file_path (Path): UNIXソケットファイルのパス。
+        _server_socket (socket.socket): サーバーソケット。
+        _request_router (RequestRouter): リクエスト振り分けルーター。
+        _protocol (Protocol): 通信プロトコル処理インスタンス。
+        _db_connection (DatabaseConnector): データベース接続プール。
+    """
+
     def __init__(self, socket_file_path: str, logger, db_connection: DatabaseConnector):
+        """UnixSocketServerのインスタンスを初期化する。
+
+        Args:
+            socket_file_path (str): バインド先UNIXドメインソケットのファイルパス。
+            logger: ロギングインスタンス。
+            db_connection (DatabaseConnector): データベースコネクタ。
+
+        Raises:
+            ValueError: socket_file_path または logger が指定されていない場合。
+        """
         if socket_file_path is None:
             raise ValueError("Socket path must be provided")
         if logger is None:
@@ -38,7 +65,12 @@ class UnixSocketServer:
 
         self._db_connection = db_connection
 
-    def start(self):
+    def start(self) -> None:
+        """ソケットをバインドしてリッスンを開始し、クライアント接続待受ループを実行する。
+
+        クライアントが接続するごとに新規スレッドを立ち上げて handle_client を実行します。
+        サーバー停止時にはソケットファイルをクリーンアップします。
+        """
         if self._socket_file_path.exists():
             self._socket_file_path.unlink()
 
@@ -58,7 +90,15 @@ class UnixSocketServer:
             if self._socket_file_path.exists():
                 self._socket_file_path.unlink()
 
-    def handle_client(self, conn: socket.socket):
+    def handle_client(self, conn: socket.socket) -> None:
+        """個々のクライアント接続を処理するスレッドワーカーループ。
+
+        データベース接続を取得し、クライアントからのリクエスト受信、バリデーション、
+        ルーターへのディスパッチ、レスポンス送信、トランザクションコミットを繰り返し実行します。
+
+        Args:
+            conn (socket.socket): クライアント接続ソケット。
+        """
         db_conn = None
         db_commit_flag = False
 
@@ -318,6 +358,14 @@ class UnixSocketServer:
             conn.close()
 
     def _get_pid(self, conn: socket.socket) -> int:
+        """UNIXドメインソケット接続相手のプロセスID (PID) を取得する。
+
+        Args:
+            conn (socket.socket): クライアント接続ソケット。
+
+        Returns:
+            int: 相手方プロセスのPID。
+        """
         SO_PEERCRED = getattr(socket, "SO_PEERCRED", 17)
         return struct.unpack(
             "3i",

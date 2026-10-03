@@ -1,12 +1,12 @@
 database:
-  host: 192.168.77.109
+  host: 127.0.0.1
   port: 3306
   user: root
   password: marugame
   database_name: pcb_inspection_db
 
 syslog_server:
-  ip_addr: 192.168.77.109
+  ip_addr: 127.0.0.1
   service_name: pcb_inspection_database
 
 socket:

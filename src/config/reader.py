@@ -1,3 +1,9 @@
+"""YAML設定ファイルの読み込みモジュール。
+
+データベース接続情報、syslogサーバー情報、UNIXドメインソケットパスなどの
+サーバー設定をYAMLファイルからパースしてConfigオブジェクトとして提供します。
+"""
+
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -7,6 +13,16 @@ import yaml
 
 @dataclass
 class Database:
+    """データベース接続設定を保持するデータクラス。
+
+    Attributes:
+        host (str): データベースのホスト名またはIPアドレス。
+        port (int): ポート番号。
+        username (str): 接続ユーザー名。
+        password (str): 接続パスワード。
+        database_name (str): 接続先データベース名。
+    """
+
     host: str
     port: int
     username: str
@@ -16,23 +32,59 @@ class Database:
 
 @dataclass
 class syslog_server:
+    """Syslogサーバー設定を保持するデータクラス。
+
+    Attributes:
+        syslog_server_ip (str): SyslogサーバーのIPアドレス。
+        service_name (str): Syslogで使用するサービス識別名。
+    """
+
     syslog_server_ip: str
     service_name: str
 
 
 @dataclass
 class uds_socket:
+    """UNIXドメインソケット設定を保持するデータクラス。
+
+    Attributes:
+        uds_socket_path (str): UNIXドメインソケットファイルのパス。
+    """
+
     uds_socket_path: str
 
 
 @dataclass
 class Config:
+    """サーバー全体の構成設定を保持するデータクラス。
+
+    Attributes:
+        database (Database): データベース設定。
+        syslog_server (syslog_server): Syslogサーバー設定。
+        socket (uds_socket): ソケット設定。
+    """
+
     database: Database
     syslog_server: syslog_server
     socket: uds_socket
 
 
 def load_config(config_file_path: str) -> Config:
+    """YAML設定ファイルを読み込み、Configオブジェクトを生成する。
+
+    Args:
+        config_file_path (str): 設定ファイルのパス。
+
+    Returns:
+        Config: パースされた設定オブジェクト。
+
+    Raises:
+        FileNotFoundError: 設定ファイルが存在しない場合。
+        RuntimeError: 設定ファイルが空の場合。
+        ValueError: YAMLパースエラーが発生した場合。
+        KeyError: 必要な設定セクションまたはキーが存在しない場合。
+        OSError: ファイル読み込み中にOSエラーが発生した場合。
+    """
     path = Path(config_file_path)
 
     if not path.is_file():

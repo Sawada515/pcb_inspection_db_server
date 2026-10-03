@@ -1,4 +1,9 @@
 #!/bin/env python3
+"""PCB検査データベースサーバー メインエントリーポイント。
+
+設定ファイルの読み込み、ロガーの初期化、データベース接続プールの初期化、
+およびUNIXドメインソケットサーバーの起動を行います。
+"""
 
 from config import load_config
 from database_connector import DatabaseConnector
@@ -6,7 +11,12 @@ from logger import Logger
 from networking import UnixSocketServer
 
 
-def main():
+def main() -> None:
+    """サーバーアプリケーションを初期化し、リクエスト受付を開始する。
+
+    設定ファイルを読み込み、ロガーおよびDB接続プールを構成した上で、
+    UNIXドメインソケットサーバーを起動してクライアントからの要求を処理します。
+    """
     # Load configuration
     config = load_config("./config/config.yaml")
 

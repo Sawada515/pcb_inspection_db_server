@@ -1,3 +1,8 @@
+"""基板検査情報 (inspection_tb) データアクセスモジュール。
+
+検査結果情報の登録、取得、更新、削除を行うDAOクラスを提供します。
+"""
+
 from logging import Logger
 
 import mariadb
@@ -7,7 +12,19 @@ from model import Inspection
 
 
 class InspectionDAO:
+    """検査テーブル (inspection_tb) に対するCRUD操作を提供するDAOクラス。
+
+    Attributes:
+        _logger (Logger): ロガーインスタンス。
+        _table_name (str): テーブル名 (inspection_tb)。
+    """
+
     def __init__(self, logger: Logger):
+        """InspectionDAOのインスタンスを初期化する。
+
+        Args:
+            logger (Logger): ロギングに使用するロガー。
+        """
         self._logger = logger
 
         self._table_name = "inspection_tb"
@@ -41,6 +58,19 @@ class InspectionDAO:
         ]
 
     def create(self, conn: Connection, inspection_data: Inspection) -> bool:
+        """新しい検査レコードをデータベースに作成する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            inspection_data (Inspection): 登録する検査データ。
+
+        Returns:
+            bool: 登録が成功した場合はTrue。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または必須フィールドが不足している場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if inspection_data is None:
@@ -100,6 +130,19 @@ class InspectionDAO:
                 cursor.close()
 
     def read(self, conn: Connection, inspection_data: Inspection) -> list[Inspection]:
+        """検索条件に一致する検査レコードを取得する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            inspection_data (Inspection): 検索条件を含む検査データ。
+
+        Returns:
+            list[Inspection]: 取得された検査オブジェクトのリスト。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if inspection_data is None:
@@ -172,6 +215,19 @@ class InspectionDAO:
                 cursor.close()
 
     def update(self, conn: Connection, inspection_data: Inspection) -> bool:
+        """指定された検索条件に一致する検査レコードを更新する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            inspection_data (Inspection): 検索条件および更新値を含む検査データ。
+
+        Returns:
+            bool: 1行以上更新された場合はTrue、それ以外はFalse。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件/更新条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if inspection_data is None:
@@ -239,6 +295,19 @@ class InspectionDAO:
                 cursor.close()
 
     def delete(self, conn: Connection, inspection_data: Inspection) -> bool:
+        """指定された検索条件に一致する検査レコードを削除する。
+
+        Args:
+            conn (Connection): MariaDBデータベース接続オブジェクト。
+            inspection_data (Inspection): 検索条件を含む検査データ。
+
+        Returns:
+            bool: 1行以上削除された場合はTrue、それ以外はFalse。
+
+        Raises:
+            ValueError: 接続またはデータがNoneの場合、または検索条件が指定されていない場合。
+            mariadb.Error: データベース操作中にエラーが発生した場合。
+        """
         if conn is None:
             raise ValueError("Connection is None")
         if inspection_data is None:
