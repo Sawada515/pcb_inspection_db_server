@@ -38,9 +38,9 @@ class UserDAO:
         ]
 
         self._update_search_white_list = [
-            "user_id", "role", "uuid", "user_status"
+            "user_id", "role", "uuid"
         ]
-        self._update_white_list = ["role", "user_status"]
+        self._update_white_list = ["user_status"]
 
         self._delete_search_white_list = [
             "user_id", "role", "uuid", "user_status"
@@ -248,6 +248,8 @@ class UserDAO:
         SET {', '.join(update_conditions)}, `updated_at` = NOW()
         WHERE {' AND '.join(search_conditions)}
         """
+
+        print(f"user_service update query: {query}")
 
         try:
             cursor.execute(query, tuple(update_values + search_values))

@@ -164,7 +164,7 @@ class Protocol:
             raise ConnectionError("Connection Disconnected")
         except ValueError as e:
             raise ValueError(f"Invalid body size: {e}")
-        
+            
         print(f"Received body: {body.decode('utf-8')}")
 
         # JSON → dict
@@ -172,6 +172,8 @@ class Protocol:
             data = json.loads(body.decode("utf-8"))
         except json.JSONDecodeError as e:
             raise ValueError(f"Invalid JSON data: {e}")
+
+        print(data)
 
         return RequestDataFormat(
             request_id=data["request_id"],
@@ -197,9 +199,5 @@ class Protocol:
         body = json.dumps(converted_data).encode("utf-8")
 
         header = struct.pack("!II", len(body), number_of_data_record)
-
-        print("Debug")
-        print(f"header: {header}")
-        print(f"body: {body.decode('utf-8')}")
 
         sock.sendall(header + body)

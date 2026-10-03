@@ -4,13 +4,20 @@ services:
         container_name: mariadb
     
         environment:
-            MARIADB_ROOT_PASSWORD: root
+            - MARIADB_ROOT_PASSWORD=root
+            - TZ=Asia/Tokyo
+
+        command:
+            - --default-time-zone=+09:00
     
         ports:
             - "3306:3306"
     
         volumes:
             - inspection_mariadb_data:/var/lib/mysql
+            - /etc/localtime:/etc/localtime:ro
+            - ./mariadb_container_log_conf/log.conf:/etc/mysql/conf.d/log.conf:ro
+            - ./logs/:/var/log/mysql
 
 volumes:
     inspection_mariadb_data:

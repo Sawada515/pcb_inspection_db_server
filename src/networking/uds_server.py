@@ -138,8 +138,14 @@ class UnixSocketServer:
         # 2. クライアント通信ループ
         try:
             while True:
-                recv_request_data: RequestDataFormat = self._protocol.recv_data(
+                try:
+                    recv_request_data: RequestDataFormat = self._protocol.recv_data(
                     conn)
+                except ConnectionError as e:
+                    self._request_router._logger.error(
+                        f"Connection error occurred: {e}")
+
+                    break
 
                 if recv_request_data is None:
                     self._request_router._logger.error(

@@ -210,6 +210,9 @@ class RequestRouter:
         Raises:
             ValueError: クエリ種別が未知の場合。
         """
+        print(request_data)
+        print(f"query_type: {query_type}")
+
         if query_type == QueryType.CREATE:
             return dao_service.create(conn, request_data)
         elif query_type == QueryType.READ:
@@ -217,6 +220,7 @@ class RequestRouter:
         elif query_type == QueryType.UPDATE:
             return dao_service.update(conn, request_data)
         elif query_type == QueryType.DELETE:
+            print("exec")
             return dao_service.delete(conn, request_data)
         else:
             raise ValueError(f"Invalid query type: {query_type}")
