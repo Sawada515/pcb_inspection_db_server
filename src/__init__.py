@@ -15,8 +15,7 @@ from src.networking import (
     ResponseDataFormat,
     UnixSocketServer,
 )
-
-from .request_router import QueryType, RequestRouter, ResourceType
+from src.request_router import QueryType, RequestRouter, ResourceType
 
 __all__ = [
     # Config

@@ -5,11 +5,14 @@
 およびUNIXドメインソケットサーバーの起動を行います。
 """
 
+from pathlib import Path
+
 from src.config import load_config
 from src.database_connector import DatabaseConnector
 from src.logger import Logger
 from src.networking import UnixSocketServer
 
+CONFIG_FILE_PATH = Path(__file__).resolve().parent / "config" / "config.yaml"
 
 def main() -> None:
     """サーバーアプリケーションを初期化し、リクエスト受付を開始する。
@@ -18,7 +21,7 @@ def main() -> None:
     UNIXドメインソケットサーバーを起動してクライアントからの要求を処理します。
     """
     # Load configuration
-    config = load_config("./config/config.yaml")
+    config = load_config(str(CONFIG_FILE_PATH))
 
     # Initialize logger
     logger = Logger(config.syslog_server.syslog_server_ip,
