@@ -8,7 +8,7 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from model import Inspection
+from src.model import Inspection
 
 
 class InspectionDAO:
@@ -30,7 +30,6 @@ class InspectionDAO:
         self._table_name = "inspection_tb"
 
         self._create_required_fields = [
-            "inspection_id",
             "user_id",
         ]
 
@@ -46,6 +45,7 @@ class InspectionDAO:
             "user_id",
         ]
         self._update_white_list = [
+            "started_at",
             "finished_at",
             "top_image_path",
             "bottom_image_path",
@@ -94,28 +94,16 @@ class InspectionDAO:
 
         query = f"""
             INSERT INTO {self._table_name} (
-                `inspection_id`,
                 `started_at`,
-                `finished_at`,
-                `top_image_path`,
-                `bottom_image_path`,
-                `feedback`,
-                `user_id`,
                 `created_at`,
-                `updated_at`
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+                `user_id`
+            ) VALUES (NOW(), NOW(), ?)
         """
 
         try:
             cursor.execute(
                 query,
                 (
-                    inspection_data.inspection_id,
-                    inspection_data.started_at,
-                    inspection_data.finished_at,
-                    inspection_data.top_image_path,
-                    inspection_data.bottom_image_path,
-                    inspection_data.feedback,
                     inspection_data.user_id,
                 ),
             )
@@ -278,7 +266,7 @@ class InspectionDAO:
         query = f"""
         UPDATE
             {self._table_name}
-        SET {', '.join(update_conditions)}, `updated_at` = NOW()
+        SET {', '.join(update_conditions)}
         WHERE {' AND '.join(search_conditions)}
         """
 

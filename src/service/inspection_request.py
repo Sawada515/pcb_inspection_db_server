@@ -8,8 +8,8 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from dao import InspectionRequestDAO
-from model import InspectionRequest
+from src.dao import InspectionRequestDAO
+from src.model import InspectionRequest
 
 
 class InspectionRequestService:

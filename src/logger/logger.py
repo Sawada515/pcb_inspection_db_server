@@ -46,13 +46,15 @@ class Logger:
                 return logger
 
             formatter = logging.Formatter(
-                f"{self._service_name}: %(levelname)s: %(message)s\n"
+                f"{self._service_name}: %(levelname)s: %(message)s"
             )
 
             handler = SysLogHandler(
                 address=(self._syslog_server_addr, 514),
                 socktype=socket.SOCK_STREAM
             )
+
+            handler.ident = ""
 
             handler.setFormatter(formatter)
 

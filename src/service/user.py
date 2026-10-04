@@ -8,8 +8,8 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from dao import UserDAO
-from model import User
+from src.dao import UserDAO
+from src.model import User
 
 
 class UserService:

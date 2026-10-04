@@ -221,4 +221,6 @@ __marimo__/
 .antigravity/
 test.sh
 logs/
-
+docs/_build/
+docs/_static/
+docs/_templates/

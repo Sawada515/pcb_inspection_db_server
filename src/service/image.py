@@ -8,8 +8,8 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from dao import ImageDAO
-from model import Image
+from src.dao import ImageDAO
+from src.model import Image
 
 
 class ImageService:

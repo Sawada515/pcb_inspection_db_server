@@ -11,14 +11,14 @@ import threading
 import time
 from pathlib import Path
 
-from database_connector import DatabaseConnector
-from networking import (
+from src.database_connector import DatabaseConnector
+from src.networking import (
     Protocol,
     RequestDataFormat,
     ResponseDataError,
     ResponseDataFormat,
 )
-from request_router import RequestRouter
+from src.request_router import RequestRouter
 
 
 class UnixSocketServer:

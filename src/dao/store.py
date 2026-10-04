@@ -9,7 +9,7 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from model import Store, StoreStatus
+from src.model import Store, StoreStatus
 
 
 class StoreDAO:

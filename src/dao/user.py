@@ -8,7 +8,7 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from model import User, UserRole, UserStatus
+from src.model import User, UserRole, UserStatus
 
 
 class UserDAO:

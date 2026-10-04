@@ -8,7 +8,7 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from model import InspectionRequest, InspectionRequestStatus
+from src.model import InspectionRequest, InspectionRequestStatus
 
 
 class InspectionRequestDAO:
@@ -40,7 +40,6 @@ class InspectionRequestDAO:
 
         self._update_search_white_list = [
             "request_id",
-            "request_status",
         ]
         self._update_white_list = [
             "request_status",
@@ -100,7 +99,6 @@ class InspectionRequestDAO:
             cursor.execute(
                 query,
                 (
-                    request_data.request_id,
                     request_data.request_status.value
                     if request_data.request_status
                     else None,

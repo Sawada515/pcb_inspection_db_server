@@ -8,7 +8,7 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from model import Image
+from src.model import Image
 
 
 class ImageDAO:
@@ -43,7 +43,6 @@ class ImageDAO:
         self._update_search_white_list = [
             "image_id",
             "defect_id",
-            "defect_image_path",
         ]
         self._update_white_list = [
             "defect_image_path",
@@ -103,7 +102,6 @@ class ImageDAO:
             cursor.execute(
                 query,
                 (
-                    image_data.image_id,
                     image_data.defect_id,
                     image_data.defect_image_path,
                 ),

@@ -8,7 +8,7 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from model import BoardSide, Defect
+from src.model import BoardSide, Defect
 
 
 class DefectDAO:
@@ -48,7 +48,6 @@ class DefectDAO:
         self._update_search_white_list = [
             "defect_id",
             "board_side",
-            "defect_type_id",
             "inspection_id",
         ]
         self._update_white_list = [
@@ -104,19 +103,20 @@ class DefectDAO:
             INSERT INTO {self._table_name} (
                 `board_side`,
                 `point`,
+                `updated_at`,
                 `area`,
                 `defect_type_id`,
-                `inspection_id`,
-                `created_at`,
-                `updated_at`
-            ) VALUES (?, ?, ?, ?, ?, NOW(), NOW())
+                `inspection_id`
+            ) VALUES (?, ?, NOW(), ?, ?, ?)
         """
+
+        print(f"defect_data: {defect_data}")
+        print(f"query: {query}")
 
         try:
             cursor.execute(
                 query,
                 (
-                    defect_data.defect_id,
                     defect_data.board_side.value
                     if defect_data.board_side
                     else None,
@@ -126,6 +126,7 @@ class DefectDAO:
                     defect_data.inspection_id,
                 ),
             )
+
             return True
         except mariadb.Error as e:
             self._logger.error(

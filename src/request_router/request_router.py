@@ -10,8 +10,16 @@ from typing import Any
 
 from mariadb import Connection
 
-from model import Defect, DefectType, Image, Inspection, InspectionRequest, Store, User
-from service import (
+from src.model import (
+    Defect,
+    DefectType,
+    Image,
+    Inspection,
+    InspectionRequest,
+    Store,
+    User,
+)
+from src.service import (
     DefectService,
     DefectTypeService,
     ImageService,

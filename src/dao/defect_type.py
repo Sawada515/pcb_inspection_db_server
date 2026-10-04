@@ -8,7 +8,7 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from model import DefectType
+from src.model import DefectType
 
 
 class DefectTypeDAO:

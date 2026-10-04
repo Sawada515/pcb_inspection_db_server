@@ -9,8 +9,8 @@ from logging import Logger
 import mariadb
 from mariadb import Connection
 
-from dao import StoreDAO
-from model import Store
+from src.dao import StoreDAO
+from src.model import Store
 
 
 class StoreService:
