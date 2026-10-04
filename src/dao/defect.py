@@ -110,9 +110,6 @@ class DefectDAO:
             ) VALUES (?, ?, NOW(), ?, ?, ?)
         """
 
-        print(f"defect_data: {defect_data}")
-        print(f"query: {query}")
-
         try:
             cursor.execute(
                 query,

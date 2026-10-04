@@ -82,9 +82,6 @@ class StoreDAO:
         search_conditions = []
         search_values = []
 
-        print(type(store_data))
-        print(f"store_data: {store_data}")
-
         for key in self._read_search_white_list:
             value = getattr(store_data, key, None)
             if value is not None:
@@ -110,8 +107,6 @@ class StoreDAO:
         WHERE {' AND '.join(search_conditions)}
 
         """
-
-        print(f"Executing query: {query} with values: {search_values}")
 
         try:
             cursor.execute(query, tuple(search_values))

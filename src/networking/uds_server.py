@@ -253,8 +253,6 @@ class UnixSocketServer:
                 else:
                     request_data = payload.data
 
-                print(request_id, resource_type, query_type, request_data)
-
                 if query_type != "read":
                     db_commit_flag = True
                 else:

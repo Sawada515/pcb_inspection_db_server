@@ -93,8 +93,6 @@ class InspectionRequestDAO:
             ) VALUES (?, NOW(), NOW())
         """
 
-        print(query)
-
         try:
             cursor.execute(
                 query,

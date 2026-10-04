@@ -165,8 +165,6 @@ class Protocol:
         except ValueError as e:
             raise ValueError(f"Invalid body size: {e}")
         
-        print(f"Received body: {body.decode('utf-8')}")
-
         # JSON → dict
         try:
             data = json.loads(body.decode("utf-8"))
@@ -190,16 +188,10 @@ class Protocol:
             data (ResponseDataFormat): 送信するレスポンスデータ。
             number_of_data_record (int): レスポンスに含まれるレコード件数。
         """
-        print(f"send_data: {data}")
         converted_data = data.to_dict()
-        print(f"converted_data: {converted_data}")
 
         body = json.dumps(converted_data).encode("utf-8")
 
         header = struct.pack("!II", len(body), number_of_data_record)
-
-        print("Debug")
-        print(f"header: {header}")
-        print(f"body: {body.decode('utf-8')}")
 
         sock.sendall(header + body)
