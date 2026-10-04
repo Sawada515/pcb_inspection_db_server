@@ -62,3 +62,6 @@ docker compose logs mariadb
 docker compose exec mariadb mariadb -u root -p
 show databases;
 ```
+
+# 実行
+python3 -m src.main
