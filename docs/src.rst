@@ -24,13 +24,13 @@ src.main module
 
 .. automodule:: src.main
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Module contents
 ---------------
 
 .. automodule:: src
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:

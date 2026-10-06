@@ -9,13 +9,13 @@ src.request\_router.request\_router module
 
 .. automodule:: src.request_router.request_router
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Module contents
 ---------------
 
 .. automodule:: src.request_router
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:

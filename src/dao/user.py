@@ -144,22 +144,30 @@ class UserDAO:
                 search_conditions.append(f"`{key}` = ?")
                 search_values.append(
                     value.value if hasattr(value, "value") else value)
+        
+        query = ""
 
         if not search_conditions:
-            self._logger.warning(
-                f"{self.__class__.__name__}: No search conditions provided")
-            raise ValueError("No search conditions provided")
-
-        query = f"""
-        SELECT
-            `user_id`,
-            `role`,
-            `uuid`,
-            `user_status`
-        FROM
-            {self._table_name}
-        WHERE {' AND '.join(search_conditions)}
-        """
+            query = f"""
+            SELECT
+                `user_id`,
+                `role`,
+                `uuid`,
+                `user_status`
+            FROM
+                {self._table_name}
+            """
+        else:
+            query = f"""
+            SELECT
+                `user_id`,
+                `role`,
+                `uuid`,
+                `user_status`
+            FROM
+                {self._table_name}
+            WHERE {' AND '.join(search_conditions)}
+            """
 
         try:
             cursor.execute(query, tuple(search_values))

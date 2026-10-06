@@ -154,22 +154,28 @@ class ImageDAO:
                 search_values.append(
                     value.value if hasattr(value, "value") else value
                 )
+        
+        query = ""
 
         if not search_conditions:
-            self._logger.warning(
-                f"{self.__class__.__name__}: No search conditions provided"
-            )
-            raise ValueError("No search conditions provided")
-
-        query = f"""
-        SELECT
-            `image_id`,
-            `defect_id`,
-            `defect_image_path`
-        FROM
-            {self._table_name}
-        WHERE {' AND '.join(search_conditions)}
-        """
+            query = f"""
+            SELECT
+                `image_id`,
+                `defect_id`,
+                `defect_image_path`
+            FROM
+                {self._table_name}
+            """
+        else:
+            query = f"""
+            SELECT
+                `image_id`,
+                `defect_id`,
+                `defect_image_path`
+            FROM
+                {self._table_name}
+            WHERE {' AND '.join(search_conditions)}
+            """
 
         try:
             cursor.execute(query, tuple(search_values))

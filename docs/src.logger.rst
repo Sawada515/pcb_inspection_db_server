@@ -9,13 +9,13 @@ src.logger.logger module
 
 .. automodule:: src.logger.logger
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Module contents
 ---------------
 
 .. automodule:: src.logger
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:

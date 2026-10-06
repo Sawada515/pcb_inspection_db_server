@@ -9,13 +9,13 @@ src.model.database\_entity module
 
 .. automodule:: src.model.database_entity
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:
 
 Module contents
 ---------------
 
 .. automodule:: src.model
    :members:
-   :show-inheritance:
    :undoc-members:
+   :show-inheritance:

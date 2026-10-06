@@ -155,26 +155,36 @@ class InspectionDAO:
                 search_values.append(
                     value.value if hasattr(value, "value") else value
                 )
+        
+        query = ""
 
         if not search_conditions:
-            self._logger.warning(
-                f"{self.__class__.__name__}: No search conditions provided"
-            )
-            raise ValueError("No search conditions provided")
-
-        query = f"""
-        SELECT
-            `inspection_id`,
-            `started_at`,
-            `finished_at`,
-            `top_image_path`,
-            `bottom_image_path`,
-            `feedback`,
-            `user_id`
-        FROM
-            {self._table_name}
-        WHERE {' AND '.join(search_conditions)}
-        """
+            query = f"""
+            SELECT
+                `inspection_id`,
+                `started_at`,
+                `finished_at`,
+                `top_image_path`,
+                `bottom_image_path`,
+                `feedback`,
+                `user_id`
+            FROM
+                {self._table_name}
+            """
+        else:
+            query = f"""
+            SELECT
+                `inspection_id`,
+                `started_at`,
+                `finished_at`,
+                `top_image_path`,
+                `bottom_image_path`,
+                `feedback`,
+                `user_id`
+            FROM
+                {self._table_name}
+            WHERE {' AND '.join(search_conditions)}
+            """
 
         try:
             cursor.execute(query, tuple(search_values))

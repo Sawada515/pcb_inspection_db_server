@@ -86,9 +86,9 @@ def main():
     send_data = SendDataFormat(
         request_id=1,
         payload=SendDataPayload(
-            query_type="delete",
+            query_type="read",
             resource=IMAGE,
-            data={"defect_id": 13}
+            data={}
         )
     )
 

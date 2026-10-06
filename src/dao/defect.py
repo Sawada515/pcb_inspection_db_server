@@ -173,24 +173,33 @@ class DefectDAO:
                     value.value if hasattr(value, "value") else value
                 )
 
+        query = ""
+        
         if not search_conditions:
-            self._logger.warning(
-                f"{self.__class__.__name__}: No search conditions provided"
-            )
-            raise ValueError("No search conditions provided")
-
-        query = f"""
-        SELECT
-            `defect_id`,
-            `board_side`,
-            `point`,
-            `area`,
-            `defect_type_id`,
-            `inspection_id`
-        FROM
-            {self._table_name}
-        WHERE {' AND '.join(search_conditions)}
-        """
+            query = f"""
+            SELECT
+                `defect_id`,
+                `board_side`,
+                `point`,
+                `area`,
+                `defect_type_id`,
+                `inspection_id`
+            FROM
+                {self._table_name}
+            """
+        else:
+            query = f"""
+            SELECT
+                `defect_id`,
+                `board_side`,
+                `point`,
+                `area`,
+                `defect_type_id`,
+                `inspection_id`
+            FROM
+                {self._table_name}
+            WHERE {' AND '.join(search_conditions)}
+            """
 
         try:
             cursor.execute(query, tuple(search_values))

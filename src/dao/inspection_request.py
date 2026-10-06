@@ -154,22 +154,25 @@ class InspectionRequestDAO:
                 )
 
         if not search_conditions:
-            self._logger.warning(
-                f"{self.__class__.__name__}: No search conditions provided"
-            )
-            raise ValueError("No search conditions provided")
-
-        query = f"""
-        SELECT
-            `request_id`,
-            `request_status`
-        FROM
-            {self._table_name}
-        WHERE {' AND '.join(search_conditions)}
-        ORDER
-            BY `created_at` DESC
-        LIMIT 1
-        """
+            query = f"""
+            SELECT
+                `request_id`,
+                `request_status`
+            FROM
+                {self._table_name}
+            """
+        else:
+            query = f"""
+            SELECT
+                `request_id`,
+                `request_status`
+            FROM
+                {self._table_name}
+            WHERE {' AND '.join(search_conditions)}
+            ORDER
+                BY `created_at` DESC
+            LIMIT 1
+            """
 
         try:
             cursor.execute(query, tuple(search_values))
