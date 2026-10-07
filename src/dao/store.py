@@ -222,7 +222,7 @@ class StoreDAO:
         query = f"""
         UPDATE
         {self._table_name}
-        SET {' , '.join(update_conditions)}
+        SET {', '.join(update_conditions)}, `updated_at` = NOW()
         WHERE {' AND '.join(search_conditions)}
 
         """

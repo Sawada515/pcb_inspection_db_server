@@ -87,8 +87,8 @@ def main():
         request_id=1,
         payload=SendDataPayload(
             query_type="read",
-            resource=IMAGE,
-            data={}
+            resource=STORE,
+            data={"store_id": 1, "store_status": "checking"}
         )
     )
 
