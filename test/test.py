@@ -63,6 +63,7 @@ def main():
     DEFECT = "defect_service"
     DEFECTTYPE = "defect_type_service"
     IMAGE = "image_service"
+    COMPLEX = "complex_service"
 
     #data={"user_id": "202521309", "role": "general", "uuid": "e0e970d5-3ef5-46f0-b1b4-ca946dae5e35", "user_status": "active"}
 
@@ -86,9 +87,9 @@ def main():
     send_data = SendDataFormat(
         request_id=1,
         payload=SendDataPayload(
-            query_type="read",
-            resource=STORE,
-            data={"store_id": 1, "store_status": "checking"}
+            query_type="get_user_list",
+            resource=COMPLEX,
+            data={}
         )
     )
 

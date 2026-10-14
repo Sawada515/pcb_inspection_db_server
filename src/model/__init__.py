@@ -16,4 +16,5 @@ from .database_entity import (
     User,
     UserRole,
     UserStatus,
+    UserList,
 )

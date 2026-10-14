@@ -11,6 +11,7 @@ from .inspection import InspectionDAO
 from .inspection_request import InspectionRequestDAO
 from .store import StoreDAO
 from .user import UserDAO
+from .complex import ComplexDAO
 
 __all__ = [
     "DefectDAO",
@@ -20,4 +21,5 @@ __all__ = [
     "InspectionRequestDAO",
     "StoreDAO",
     "UserDAO",
+    "ComplexDAO",
 ]

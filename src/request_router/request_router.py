@@ -18,6 +18,7 @@ from src.model import (
     InspectionRequest,
     Store,
     User,
+    UserList,
 )
 from src.service import (
     DefectService,
@@ -25,6 +26,7 @@ from src.service import (
     ImageService,
     InspectionRequestService,
     InspectionService,
+    ComplexService,
     StoreService,
     UserService,
 )
@@ -38,12 +40,15 @@ class QueryType(Enum):
         READ: 読み取り (SELECT)。
         UPDATE: 更新 (UPDATE)。
         DELETE: 削除 (DELETE)。
+
+        USER_LIST: ユーザーリスト取得 (SELECT)。 <= 後から追加分
     """
 
     CREATE = "create"
     READ = "read"
     UPDATE = "update"
     DELETE = "delete"
+    USER_LIST = "get_user_list" # <= 汚い
 
 
 class ResourceType(Enum):
@@ -57,6 +62,7 @@ class ResourceType(Enum):
         DEFECT: 欠陥サービス (defect_service)。
         DEFECTTYPE: 欠陥種別サービス (defect_type_service)。
         IMAGE: 画像サービス (image_service)。
+        COMPLEX: 複雑なデータ操作サービス (complex_service)。
     """
 
     USER = "user_service"
@@ -66,6 +72,7 @@ class ResourceType(Enum):
     DEFECT = "defect_service"
     DEFECTTYPE = "defect_type_service"
     IMAGE = "image_service"
+    COMPLEX = "complex_service"
 
 
 ALL_QUERY_TYPES = {
@@ -73,6 +80,7 @@ ALL_QUERY_TYPES = {
     QueryType.READ,
     QueryType.UPDATE,
     QueryType.DELETE,
+    QueryType.USER_LIST,
 }
 
 RESOURCE_MODEL_MAP = {
@@ -83,6 +91,7 @@ RESOURCE_MODEL_MAP = {
     ResourceType.DEFECT: Defect,
     ResourceType.DEFECTTYPE: DefectType,
     ResourceType.IMAGE: Image,
+    ResourceType.COMPLEX: None,  
 }
 
 
@@ -112,6 +121,7 @@ class RequestRouter:
             ResourceType.DEFECT: DefectService(self._logger),
             ResourceType.DEFECTTYPE: DefectTypeService(self._logger),
             ResourceType.IMAGE: ImageService(self._logger),
+            ResourceType.COMPLEX: ComplexService(self._logger),
         }
 
         # 許可する QueryType のマッピング
@@ -123,6 +133,7 @@ class RequestRouter:
             ResourceType.DEFECT: ALL_QUERY_TYPES,
             ResourceType.DEFECTTYPE: ALL_QUERY_TYPES,
             ResourceType.IMAGE: ALL_QUERY_TYPES,
+            ResourceType.COMPLEX: ALL_QUERY_TYPES,
         }
 
     def dispatch(
@@ -182,12 +193,15 @@ class RequestRouter:
 
             converted_data = None
 
-            model_cls = RESOURCE_MODEL_MAP.get(request_resource)
-            if model_cls is None:
-                raise ValueError(
-                    f"No model class found for resource: {request_resource}")
+            if query_type != QueryType.USER_LIST:
+                model_cls = RESOURCE_MODEL_MAP.get(request_resource)
+                if model_cls is None:
+                    raise ValueError(
+                        f"No model class found for resource: {request_resource}")
 
-            converted_data = model_cls(**request_data)
+                converted_data = model_cls(**request_data)
+            else:
+                converted_data = None
 
             return self._dispatch_query_type(query_type, converted_data, conn, service)
 
@@ -225,6 +239,7 @@ class RequestRouter:
             return dao_service.update(conn, request_data)
         elif query_type == QueryType.DELETE:
             return dao_service.delete(conn, request_data)
+        elif query_type == QueryType.USER_LIST:
+            return dao_service.get_user_list(conn)
         else:
             raise ValueError(f"Invalid query type: {query_type}")
-

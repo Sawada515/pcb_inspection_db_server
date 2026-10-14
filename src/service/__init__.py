@@ -11,6 +11,7 @@ from .inspection import InspectionService
 from .inspection_request import InspectionRequestService
 from .store import StoreService
 from .user import UserService
+from .complex import ComplexService
 
 __all__ = [
     "DefectService",
@@ -20,4 +21,5 @@ __all__ = [
     "InspectionService",
     "StoreService",
     "UserService",
+    "ComplexService"
 ]

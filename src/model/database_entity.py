@@ -355,3 +355,26 @@ class Image:
             "defect_id": self.defect_id,
             "defect_image_path": self.defect_image_path,
         }
+
+# 複雑なデータに対応するために追加
+@dataclass
+class UserList:
+    """
+    ユーザーリスト情報を表すデータクラス。
+    """
+
+    user_id: str
+    created_at: datetime
+    final_inspection_at: datetime | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        """オブジェクトを辞書形式に変換する。
+
+        Returns:
+            dict[str, Any]: 属性値を格納した辞書。
+        """
+        return {
+            "user_id": self.user_id,
+            "created_at": self.created_at.isoformat(),
+            "final_inspection_at": self.final_inspection_at.isoformat() if self.final_inspection_at else None,
+        }
