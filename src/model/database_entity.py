@@ -363,7 +363,7 @@ class UserList:
     ユーザーリスト情報を表すデータクラス。
     """
 
-    username: str
+    user_id: str
     created_at: datetime
     final_inspection_at: datetime | None = None
 
@@ -374,7 +374,7 @@ class UserList:
             dict[str, Any]: 属性値を格納した辞書。
         """
         return {
-            "user_name": self.username,
+            "username": self.user_id,
             "created_at": self.created_at.isoformat(),
             "final_inspection_at": self.final_inspection_at.isoformat() if self.final_inspection_at else None,
         }

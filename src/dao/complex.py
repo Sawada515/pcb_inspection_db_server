@@ -72,7 +72,7 @@ class ComplexDAO:
             
             for r in cursor.fetchall():
                 user_list = UserList(
-                    username=r[0],
+                    user_id=r[0],
                     created_at=r[1],
                     final_inspection_at=r[2]
                 )
