@@ -21,12 +21,12 @@ from src.model import (
     UserList,
 )
 from src.service import (
+    ComplexService,
     DefectService,
     DefectTypeService,
     ImageService,
     InspectionRequestService,
     InspectionService,
-    ComplexService,
     StoreService,
     UserService,
 )
@@ -91,7 +91,7 @@ RESOURCE_MODEL_MAP = {
     ResourceType.DEFECT: Defect,
     ResourceType.DEFECTTYPE: DefectType,
     ResourceType.IMAGE: Image,
-    ResourceType.COMPLEX: None,  
+    ResourceType.COMPLEX: None,
 }
 
 
@@ -193,15 +193,15 @@ class RequestRouter:
 
             converted_data = None
 
-            if query_type != QueryType.USER_LIST:
+            if query_type == QueryType.USER_LIST:
+                converted_data = UserList
+            else:
                 model_cls = RESOURCE_MODEL_MAP.get(request_resource)
                 if model_cls is None:
                     raise ValueError(
                         f"No model class found for resource: {request_resource}")
 
                 converted_data = model_cls(**request_data)
-            else:
-                converted_data = None
 
             return self._dispatch_query_type(query_type, converted_data, conn, service)
 

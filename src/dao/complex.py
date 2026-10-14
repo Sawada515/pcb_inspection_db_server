@@ -7,6 +7,7 @@ from mariadb import Connection
 
 from src.model import *
 
+
 class ComplexDAO:
     """複雑なデータ操作を行うDAOクラス。
 
@@ -71,7 +72,7 @@ class ComplexDAO:
             
             for r in cursor.fetchall():
                 user_list = UserList(
-                    user_id=r[0],
+                    username=r[0],
                     created_at=r[1],
                     final_inspection_at=r[2]
                 )
