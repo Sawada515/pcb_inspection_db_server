@@ -8,6 +8,7 @@ database:
 syslog_server:
   ip_addr: 127.0.0.1
   service_name: pcb_inspection_database
+  facility: local0
 
 socket:
   socket_path: /tmp/database_server.sock

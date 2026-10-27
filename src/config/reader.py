@@ -41,7 +41,7 @@ class syslog_server:
 
     syslog_server_ip: str
     service_name: str
-    facility: int
+    facility: str
 
 
 @dataclass
