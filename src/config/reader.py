@@ -41,6 +41,7 @@ class syslog_server:
 
     syslog_server_ip: str
     service_name: str
+    facility: int
 
 
 @dataclass
@@ -132,7 +133,8 @@ def load_config(config_file_path: str) -> Config:
 
         syslog_server_config = syslog_server(
             syslog_server_ip=raw_syslog_server_config["ip_addr"],
-            service_name=raw_syslog_server_config["service_name"]
+            service_name=raw_syslog_server_config["service_name"],
+            facility=raw_syslog_server_config["facility"]
         )
 
         raw_socket_config = config_data.get("socket")

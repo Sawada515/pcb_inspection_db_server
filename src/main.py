@@ -25,7 +25,8 @@ def main() -> None:
 
     # Initialize logger
     logger = Logger(config.syslog_server.syslog_server_ip,
-                    config.syslog_server.service_name)
+                    config.syslog_server.service_name,
+                    config.syslog_server.facility)
     logger_client = logger.open_log()
 
     # Initialize database connector

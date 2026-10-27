@@ -18,7 +18,7 @@ class Logger:
         _service_name (str): サービス識別名。
     """
 
-    def __init__(self, syslog_server_addr: str, service_name: str):
+    def __init__(self, syslog_server_addr: str, service_name: str, facility: int):
         """Loggerのインスタンスを初期化する。
 
         Args:
@@ -27,6 +27,7 @@ class Logger:
         """
         self._syslog_server_addr = syslog_server_addr
         self._service_name = service_name
+        self._facility = facility
 
     def open_log(self) -> logging.Logger:
         """Syslogハンドラーを登録したLoggerインスタンスを生成・取得する。
@@ -46,15 +47,16 @@ class Logger:
                 return logger
 
             formatter = logging.Formatter(
-                f"{self._service_name}: %(levelname)s: %(message)s"
+                "%(message)s"
             )
 
             handler = SysLogHandler(
                 address=(self._syslog_server_addr, 514),
+                facility=self._facility,
                 socktype=socket.SOCK_STREAM
             )
 
-            handler.ident = ""
+            handler.ident = f"{self._service_name}: "
 
             handler.setFormatter(formatter)
 
